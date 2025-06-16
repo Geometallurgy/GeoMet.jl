@@ -1,0 +1,13 @@
+name = "GeoMet"
+uuid = "17f98db7-af68-4c95-97fe-c6749748e69a"
+authors = ["Alunos-PIC"]
+version = "1.0.0-DEV"
+
+[compat]
+julia = "1.11"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
