@@ -1,11 +1,11 @@
 module GeoMet
 
-export calculate_bwi  # Exporta a função para ser usada fora do módulo
+export calculate_bwi  # Exporting the function to be used outside the module
 
 """
     calculate_bwi(F80, P80, M, A)
 
-Calcula o Índice de Trabalho de Bond (BWI).
+Calculate the Bond Work Index (BWI).
 """
 function calculate_bwi(F80::Real, P80::Real, M::Real, A::Real)
     if any(x <= 0 for x in (F80, P80, M, A))
