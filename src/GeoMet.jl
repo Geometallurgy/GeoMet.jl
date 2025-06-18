@@ -1,5 +1,7 @@
 module GeoMet
 
+using DataFrames
+
 export calculate_bwi  # Exporting the function to be used outside the module
 
 """
@@ -16,6 +18,11 @@ function calculate_bwi(F80::Real, P80::Real, M::Real, A::Real)
         error("Denominator zero: check F80 e P80")
     end
     return 49 / denominator
+end
+
+# DataFrames version
+function calculate_bwi(df::AbstractDataFrame; F80=:F80, P80=:P80, M=:M, A=:A)
+    return calculate_bwi.(df[!,F80], df[!,P80], df[!,M], df[!,A])
 end
 
 end
