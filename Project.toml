@@ -1,6 +1,6 @@
 name = "GeoMet"
 uuid = "17f98db7-af68-4c95-97fe-c6749748e69a"
-authors = ["Alunos-PIC"]
+authors = ["Geometallurgy Lab - UFMG"]
 version = "1.0.0-DEV"
 
 [compat]
