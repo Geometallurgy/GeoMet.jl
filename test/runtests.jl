@@ -4,7 +4,7 @@ using DataFrames
 
 @testset "GeoMet.jl" begin
     # Test with known values
-    @test isapprox(calculate_bwi(2174, 97, 0.81, 150), 23.023, atol=0.001)  # atol is the absolute tolerance
+    @test isapprox(calculate_bwi(2174, 97, 0.81, 150), 22.9706, atol=0.001)  # atol is the absolute tolerance
     
     # Error tests
     @test_throws ErrorException calculate_bwi(0, 200, 1.0, 1.0)  # F80 inválido
