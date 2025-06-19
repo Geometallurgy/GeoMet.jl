@@ -18,7 +18,8 @@ It currently supports the calculation of the **Bond Work Index (BWI)** for miner
 ] add GeoMet
 
 ```
-```# Usage example
+# Usage example
+```
 using GeoMet
 
 # Calculate BWI with scalar inputs
