@@ -1,7 +1,7 @@
 name = "GeoMet"
 uuid = "17f98db7-af68-4c95-97fe-c6749748e69a"
 authors = ["Geometallurgy Lab - UFMG"]
-version = "0.1.0"
+version = "0.1.1"
 
 [compat]
 julia = "1.6, 1.9"
