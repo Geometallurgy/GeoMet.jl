@@ -10,9 +10,24 @@ It currently supports the calculation of the **Bond Work Index (BWI)** for miner
 - Calculate Bond Work Index (BWI) using scalar values or DataFrames
 - Input validation to ensure safe calculations
 
-## Installation
+## Installation and Usage Example
 
-To install GeoMet.jl, run the following in the Julia REPL:
+# Installation (run this in Julia REPL)
 
 ```julia
 ] add GeoMet
+
+```
+```# Usage example
+using GeoMet
+
+# Calculate BWI with scalar inputs
+bwi = calculate_bwi(2174, 97, 0.81, 150)
+println("Bond Work Index = ", bwi)
+
+# Calculate BWI for a DataFrame
+using DataFrames
+
+df = DataFrame(F80=[2000, 1500], P80=[200, 150], M=[1.0, 1.1], A=[1.0, 1.05])
+bwi_values = calculate_bwi(df)
+println("BWI values for DataFrame:\n", bwi_values)
