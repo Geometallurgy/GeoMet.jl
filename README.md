@@ -33,7 +33,7 @@ df = DataFrame(F80=[2000, 1500], P80=[200, 150], M=[1.0, 1.1], A=[1.0, 1.05])
 bwi_values = calculate_bwi(df)
 println("BWI values for DataFrame:\n", bwi_values)
 
-##  Installation Guide
+## Installation Guide
 
 To use this package and run the interactive notebooks, you need to install both [Julia](https://julialang.org/downloads/) and [Pluto.jl](https://plutojl.org/).
 
