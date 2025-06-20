@@ -37,13 +37,13 @@ println("BWI values for DataFrame:\n", bwi_values)
 
 To use this package and run the interactive notebooks, you need to install both [Julia](https://julialang.org/downloads/) and [Pluto.jl](https://plutojl.org/).
 
-### 1. Install Julia
+## 1. Install Julia
 
 - Visit the official Julia website: [https://julialang.org/downloads/](https://julialang.org/downloads/)
 - Download the latest stable version compatible with your operating system (Windows, macOS, or Linux)
 - Follow the installation instructions for your system
 
-### 2. Install Pluto.jl
+# 2. Install Pluto.jl
 
 After installing Julia:
 
