@@ -12,14 +12,15 @@ It currently supports the calculation of the **Bond Work Index (BWI)** for miner
 
 ## Installation and Usage Example
 
-# Installation (run this in Julia REPL)
+### Installation (run this in Julia REPL)
 
 ```julia
 ] add GeoMet
+```
 
-```
-# Usage example
-```
+### Usage example
+
+```julia
 using GeoMet
 
 # Calculate BWI with scalar inputs
@@ -32,6 +33,7 @@ using DataFrames
 df = DataFrame(F80=[2000, 1500], P80=[200, 150], M=[1.0, 1.1], A=[1.0, 1.05])
 bwi_values = calculate_bwi(df)
 println("BWI values for DataFrame:\n", bwi_values)
+```
 
 ## Installation Guide
 
@@ -47,7 +49,7 @@ To use this package and run the interactive notebooks, you need to install both 
 
 After installing Julia:
 
-1. Open Julia (REPL)
+1. Open Julia (REPL)  
 2. Type and run the following command to install Pluto:
 
     ```julia
