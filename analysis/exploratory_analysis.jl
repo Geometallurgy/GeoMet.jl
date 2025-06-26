@@ -3,6 +3,7 @@ using DataFrames
 using GeoMet
 using Statistics
 using Plots
+using StatsPlots #necessário para boxplot
 
 # --- Block 1: Load CSV data ---
 url = "https://zenodo.org/record/6587598/files/comminution.csv?download=1"
