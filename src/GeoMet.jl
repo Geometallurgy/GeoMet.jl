@@ -1,6 +1,11 @@
 module GeoMet
-using DataFrames
+
+using DataFrames # Import DataFrames for data manipulation
+using DecisionTree  # Import DecisionTree for Random Forest
+
 export calculate_bwi  # Exporting the function to be used outside the module
+export random_forest_model  # Exporting the Random Forest function
+
 """
 Calculate the Bond Work Index (BWI)
 """
@@ -10,7 +15,7 @@ function calculate_bwi(F80::Real, P80::Real, M::Real, A::Real)
     end
     denominator = A^0.23 * M^0.82 * ( (10 * P80^-0.5) - (10 * F80^-0.5) )
     if denominator == 0
-        error("Denominator zero: check F80 e P80")
+        error("Denominator zero: check F80 and P80")
     end
     return 49 / denominator
 end
@@ -19,4 +24,27 @@ end
 function calculate_bwi(df::AbstractDataFrame; F80=:F80, P80=:P80, M=:M, A=:A)
     return calculate_bwi.(df[!,F80], df[!,P80], df[!,M], df[!,A])
 end
+"""
+    random_forest_model(df::DataFrame, target::Symbol; n_trees::Int=100)
+
+Train a Random Forest regressor using all columns except the target as features.
+
+# Arguments
+- `df::DataFrame`: input dataset
+- `target::Symbol`: column name of the target variable
+- `n_trees::Int=100`: number of trees to use (default 100)
+
+# Returns
+- `model`: trained Random Forest model
+"""
+function random_forest_model(df::DataFrame, target::Symbol; n_trees::Int=100)
+    X = convert(Matrix, select(df, Not(target)))  # Extract feature matrix excluding target
+    y = df[:, target]                             # Extract target vector
+
+    model = DecisionTree.RandomForestRegressor(n_trees=n_trees)
+    fit!(model, X, y)
+
+    return model
+end
+
 end
