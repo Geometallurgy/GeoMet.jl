@@ -9,6 +9,8 @@ It currently supports the calculation of the **Bond Work Index (BWI)** for miner
 
 - Calculate Bond Work Index (BWI) using scalar values or DataFrames
 - Input validation to ensure safe calculations
+- Calculate Specific Energy using Charles’ Equation (adjustable exponent for Rittinger, Bond, Kick)
+- Built-in Random Forest model training for prediction
 
 ## Installation and Usage Example
 
