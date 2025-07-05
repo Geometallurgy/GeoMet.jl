@@ -18,5 +18,22 @@ using DataFrames
     df.BWI = calculate_bwi(df)  # Target column
     model = random_forest_model(df, :BWI, n_trees=5)  # Train small model
     @test !isnothing(model)  # Basic check that model was trained
+end
     
+@testset "GeoMet.jl – Charles Specific Energy" begin
+    # Test with known values (n = 1, Rittinger)
+    @test isapprox(calculate_specific_energy_charles(2000.0, 100.0, 1000.0, 1.0), 990.0, atol=0.001)
+
+    # Test with Bond exponent (n = 0.5)
+    @test isapprox(calculate_specific_energy_charles(2000.0, 100.0, 1000.0, 0.5), 292.893, atol=0.001)
+
+    # Error tests
+    @test_throws ErrorException calculate_specific_energy_charles(-100.0, 100.0, 1000.0, 1.0)
+    @test_throws ErrorException calculate_specific_energy_charles(2000.0, 0.0, 1000.0, 1.0)
+
+    # DataFrame test
+    df = DataFrame(F80=[2000.0, 1500.0], P80=[200.0, 150.0])
+    results = calculate_specific_energy_charles(df; K=1000.0, n=1.0)
+    @test length(results) == 2
+    @test isapprox(results[1], 990.0, atol=0.001)
 end
