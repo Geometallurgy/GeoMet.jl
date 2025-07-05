@@ -6,9 +6,12 @@ using DecisionTree  # Import DecisionTree for Random Forest
 export calculate_bwi  # Exporting the function to be used outside the module
 export random_forest_model  # Exporting the Random Forest function
 
+#---------------------------------------------------------------------------------------
+
 """
 Calculate the Bond Work Index (BWI)
 """
+
 function calculate_bwi(F80::Real, P80::Real, M::Real, A::Real)
     if any(x <= 0 for x in (F80, P80, M, A))
         error("All parameters must be positive")
@@ -24,9 +27,59 @@ end
 function calculate_bwi(df::AbstractDataFrame; F80=:F80, P80=:P80, M=:M, A=:A)
     return calculate_bwi.(df[!,F80], df[!,P80], df[!,M], df[!,A])
 end
-"""
-    random_forest_model(df::DataFrame, target::Symbol; n_trees::Int=100)
 
+#-------------------------------------------------------------------------------------------
+"""
+Calculate the Magdalinovic Impact Abrasion Index (MIA)
+"""
+
+#-------------------------------------------------------------------------------------------
+"""
+Calculate the Morrell Index for Crushing (MIC)
+"""
+
+#-------------------------------------------------------------------------------------------
+"""
+Calculate the Morrell Index for High-pressure grinding rolls (MIH)
+"""
+
+#--------------------------------------------------------------------------------------------
+"""
+Calculate the Sag Power Index (SPI)
+"""
+
+#--------------------------------------------------------------------------------------------
+"""
+Calculate the specific energy of comminution
+"""
+# Scalar version
+function calculate_specific_energy_charles(F80::Real, P80::Real, K::Real, n::Real)
+    if any(x <= 0 for x in (F80, P80, K))
+        error("F80, P80, and K must be positive")
+    end
+    if F80 == P80
+        error("F80 and P80 must be different to avoid zero energy result")
+    end
+    denominator = P80^n
+    numerator = F80^n
+    if denominator == 0 || numerator == 0
+        error("Invalid exponentiation leading to zero denominator")
+    end
+    return K * (1 / denominator - 1 / numerator)
+end
+
+# DataFrame version
+function calculate_specific_energy_charles(df::AbstractDataFrame; F80=:F80, P80=:P80, K::Real=1000.0, n::Real=1.0)
+    return calculate_specific_energy_charles.(df[!,F80], df[!,P80], K, n)
+end
+
+
+
+#--------------------------------------------------------------------------------------------
+"""
+random_forest_model(df::DataFrame, target::Symbol; n_trees::Int=100)
+"""
+"""
 Train a Random Forest regressor using all columns except the target as features.
 
 # Arguments
@@ -46,5 +99,5 @@ function random_forest_model(df::DataFrame, target::Symbol; n_trees::Int=100)
 
     return model
 end
-
+#-------------------------------------------------------------------------------------
 end
