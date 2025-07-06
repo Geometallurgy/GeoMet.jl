@@ -71,7 +71,10 @@ Train a Random Forest regressor using all columns except the target as features.
 - `model`: trained Random Forest model
 """
 function random_forest_model(df::DataFrame, target::Symbol; n_trees::Int=100)
-    X = convert(Matrix, select(df, Not(target)))  # Extract feature matrix excluding target
+    features = names(df, Not(target))
+    numeric_features = filter(name -> eltype(df[!, name]) <: Number, features)
+    X = Matrix(df[:, numeric_features])
+    # Extract feature matrix excluding target
     y = df[:, target]                             # Extract target vector
 
     model = DecisionTree.RandomForestRegressor(n_trees=n_trees)
