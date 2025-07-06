@@ -28,10 +28,8 @@ end
     @test isapprox(calculate_specific_energy_charles(2000.0, 100.0, 1000.0, 0.5), 292.893, atol=0.001)
 
     # Error tests
-    @test_throws ArgumentError calculate_specific_energy_charles(2000.0, 100.0, 1000.0, 1.0)  # → 990.0
-    @test_throws ArgumentError calculate_specific_energy_charles(2000.0, 100.0, 1000.0, 0.5)  # → ~292.893
-    
-
+    @test_throws ArgumentError calculate_specific_energy_charles(0.0, 100.0, 1000.0, 1.0)  # invalid F80
+    @test_throws ArgumentError calculate_specific_energy_charles(100.0, 100.0, 1000.0, 1.0)  # F80 == P80
 
     # DataFrame test
     df = DataFrame(F80=[2000.0, 1500.0], P80=[200.0, 150.0])
