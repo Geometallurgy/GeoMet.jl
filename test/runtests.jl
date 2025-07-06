@@ -15,7 +15,7 @@ using DataFrames
     @test length(calculate_bwi(df)) == 2
 
     # Random Forest test
-    df.BWI = calculate_bwi(df)  # Target column
+    df.BWI = collect(calculate_bwi(df))  # Target column
     model = random_forest_model(df, :BWI, n_trees=5)  # Train small model
     @test !isnothing(model)  # Basic check that model was trained
 end
