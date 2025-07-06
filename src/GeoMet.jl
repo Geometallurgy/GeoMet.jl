@@ -31,26 +31,6 @@ end
 
 #-------------------------------------------------------------------------------------------
 """
-Calculate the Magdalinovic Impact Abrasion Index (MIA)
-"""
-
-#-------------------------------------------------------------------------------------------
-"""
-Calculate the Morrell Index for Crushing (MIC)
-"""
-
-#-------------------------------------------------------------------------------------------
-"""
-Calculate the Morrell Index for High-pressure grinding rolls (MIH)
-"""
-
-#--------------------------------------------------------------------------------------------
-"""
-Calculate the Sag Power Index (SPI)
-"""
-
-#--------------------------------------------------------------------------------------------
-"""
 Calculate the specific energy of comminution
 """
 # Scalar version
@@ -79,8 +59,7 @@ end
 #--------------------------------------------------------------------------------------------
 """
 random_forest_model(df::DataFrame, target::Symbol; n_trees::Int=100)
-"""
-"""
+
 Train a Random Forest regressor using all columns except the target as features.
 
 # Arguments
