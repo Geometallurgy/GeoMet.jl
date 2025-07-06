@@ -35,18 +35,15 @@ Calculate the specific energy of comminution using Charles' law.
 """
 function calculate_specific_energy_charles(F80::Real, P80::Real, K::Real, n::Real)
     if any(x <= 0 for x in (F80, P80, K))
-        error("F80, P80, and K must be positive")
+        throw(ArgumentError("F80, P80, and K must be positive"))
     end
     if F80 == P80
-        error("F80 and P80 must be different to avoid zero energy result")
+        throw(ArgumentError("F80 and P80 must be different to avoid zero energy result"))
     end
 
-    # Converte mm para microns
-    F80_um = F80 * 1000
-    P80_um = P80 * 1000
-
-    return K * (1 / P80_um^n - 1 / F80_um^n)
+    return K * (1 / P80^n - 1 / F80^n)
 end
+
 
 # DataFrame version
 function calculate_specific_energy_charles(df::AbstractDataFrame; F80=:F80, P80=:P80, K::Real=1000.0, n::Real=1.0)
