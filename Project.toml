@@ -3,14 +3,15 @@ uuid = "17f98db7-af68-4c95-97fe-c6749748e69a"
 authors = ["Geometallurgy Lab - UFMG"]
 version = "0.1.1"
 
-[compat]
-julia = "1.6, 1.9, 1.10, 1.11"
-DataFrames = "1.0, 2.0"
-
 [deps]
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
-DecisionTree = "093fc24a-ae57-5d10-9952-331d41423f4d"
+DecisionTree = "7806a523-6efd-50cb-b5f6-3fa6f1930dbb"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[compat]
+DataFrames = "1.0, 2.0"
+DecisionTree = "0.12"
+julia = "1.6, 1.9, 1.10, 1.11"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
