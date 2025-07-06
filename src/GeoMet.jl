@@ -31,9 +31,8 @@ end
 
 #-------------------------------------------------------------------------------------------
 """
-Calculate the specific energy of comminution
+Calculate the specific energy of comminution using Charles' law.
 """
-# Scalar version
 function calculate_specific_energy_charles(F80::Real, P80::Real, K::Real, n::Real)
     if any(x <= 0 for x in (F80, P80, K))
         error("F80, P80, and K must be positive")
@@ -41,12 +40,12 @@ function calculate_specific_energy_charles(F80::Real, P80::Real, K::Real, n::Rea
     if F80 == P80
         error("F80 and P80 must be different to avoid zero energy result")
     end
-    denominator = P80^n
-    numerator = F80^n
-    if denominator == 0 || numerator == 0
-        error("Invalid exponentiation leading to zero denominator")
-    end
-    return K * (1 / denominator - 1 / numerator)
+
+    # Converte mm para microns
+    F80_um = F80 * 1000
+    P80_um = P80 * 1000
+
+    return K * (1 / P80_um^n - 1 / F80_um^n)
 end
 
 # DataFrame version
