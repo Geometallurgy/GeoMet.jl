@@ -35,6 +35,6 @@ end
     # DataFrame test
     df = DataFrame(F80=[2.0, 1.5], P80=[0.2, 0.15]) 
     results = calculate_specific_energy_charles(df; K=1000.0, n=1.0)
-    @test isapprox(results[1], 9500.0, atol=0.01)
+    @test isapprox(results[1], 4500.0, atol=0.01)
 
 end
