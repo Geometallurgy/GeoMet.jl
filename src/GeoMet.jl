@@ -45,7 +45,8 @@ function calculate_specific_energy_morrell(F80::Real, P80::Real, Mi::Real)
     F80_mm = F80 / 1000
     P80_mm = P80 / 1000
 
-    f(x) = -(0.295 + x / 1000)
+    f(x) = - (0.295 + x / 1_000_000) / x
+
     return Mi * 4 * (P80_mm * f(P80_mm) - F80_mm * f(F80_mm))
 end
 
