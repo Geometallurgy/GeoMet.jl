@@ -30,26 +30,29 @@ function calculate_bwi(df::AbstractDataFrame; F80=:F80, P80=:P80, M=:M, A=:A)
 end
 
 #-------------------------------------------------------------------------------------------
+
 """
-Calculate the specific energy of comminution using Morrell's method.
+Calculate the specific energy of comminution using Morrell's Equation.
 """
 function calculate_specific_energy_morrell(F80::Real, P80::Real, Mi::Real)
-    if any(x <= 0 for x in (F80, P80, Mi))
-        throw(ArgumentError("F80, P80 and Mi must be positive"))
+    if any(x -> x <= 0, (F80, P80, Mi))
+        throw(ArgumentError("F80, P80, and Mi must be positive values."))
     end
     if F80 == P80
-        throw(ArgumentError("F80 and P80 must be diferent"))
+        throw(ArgumentError("F80 and P80 must be different."))
     end
 
-    f(x) = -(0.295 + x / 1_000_000)
-    return Mi * 4 * (P80 * f(P80) - F80 * f(F80))
-end
+    # Internally convert to mm, since equation expects x in mm
+    F80_mm = F80 / 1000
+    P80_mm = P80 / 1000
 
-# Dataframes Version
+    f(x) = -(0.295 + x)
+    return Mi * 4 * (P80_mm * f(P80_mm) - F80_mm * f(F80_mm))
+end
+#dataframes version
 function calculate_specific_energy_morrell(df::AbstractDataFrame; F80=:F80, P80=:P80, Mi::Symbol=:Mi)
     return calculate_specific_energy_morrell.(df[!, F80], df[!, P80], df[!, Mi])
 end
-
 
 
 #--------------------------------------------------------------------------------------------
