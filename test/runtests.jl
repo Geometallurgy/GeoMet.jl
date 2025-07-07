@@ -22,11 +22,8 @@ end
     
 @testset "GeoMet.jl – Morrell Specific Energy" begin
     # test with fictional values (Mi = 19.4, F80 = 100_000 μm, P80 = 750 μm)
-    @test isapprox(
-        calculate_specific_energy_morrell(100_000.0, 750.0, 19.4),
-        9.42,
-        atol=0.01
-    )
+   
+    @test isapprox(calculate_specific_energy_morrell(100_000.0, 750.0, 19.4), 9.42, atol=0.01)
 
     # Test with invalid input error
     @test_throws ArgumentError calculate_specific_energy_morrell(0.0, 750.0, 19.4)
