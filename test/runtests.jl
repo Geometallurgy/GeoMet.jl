@@ -20,21 +20,21 @@ using DataFrames
     @test !isnothing(model)  # Basic check that model was trained
 end
     
-@testset "GeoMet.jl – Charles Specific Energy" begin
-    # Test with known values (n = 1, Rittinger)
-   
-    @test isapprox(calculate_specific_energy_charles(2.0, 0.1, 1000.0, 1.0), 9500.0, atol=0.001)
+@testset "GeoMet.jl – Morrell Specific Energy" begin
+    # test with fictional values (Mi = 19.4, F80 = 100_000 μm, P80 = 750 μm)
+    @test isapprox(
+        calculate_specific_energy_morrell(100_000.0, 750.0, 19.4),
+        9.42,
+        atol=0.01
+    )
 
-    # Test with Bond exponent (n = 0.5)
-    @test isapprox(calculate_specific_energy_charles(2.0, 0.1, 1000.0, 0.5), 2455.17, atol=0.01)
+    # Test with invalid input error
+    @test_throws ArgumentError calculate_specific_energy_morrell(0.0, 750.0, 19.4)
+    @test_throws ArgumentError calculate_specific_energy_morrell(750.0, 750.0, 19.4)
 
-    # Error tests
-    @test_throws ArgumentError calculate_specific_energy_charles(0.0, 100.0, 1000.0, 1.0)  # invalid F80
-    @test_throws ArgumentError calculate_specific_energy_charles(100.0, 100.0, 1000.0, 1.0)  # F80 == P80
-
-    # DataFrame test
-    df = DataFrame(F80=[2.0, 1.5], P80=[0.2, 0.15]) 
-    results = calculate_specific_energy_charles(df; K=1000.0, n=1.0)
-    @test isapprox(results[1], 4500.0, atol=0.01)
-
+    # Dataframes test
+    df = DataFrame(F80=[100_000.0, 75_000.0], P80=[750.0, 500.0], Mi=[19.4, 18.0])
+    results = calculate_specific_energy_morrell(df)
+    @test isapprox(results[1], 9.42, atol=0.01)
 end
+
