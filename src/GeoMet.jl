@@ -42,11 +42,10 @@ function calculate_specific_energy_morrell(F80::Real, P80::Real, Mi::Real)
         throw(ArgumentError("F80 and P80 must be different."))
     end
 
-    f(x) = - (0.295 + x / 1_000_000) / x
+    f(x) = (0.295 + x / 1_000_000) / x
 
-    return Mi * 4 * (f(P80) - f(F80))
+    return Mi * 4 * (f(P80) - f(F80)) * 1000
 end
-
 # dataframes version
 function calculate_specific_energy_morrell(df::AbstractDataFrame; F80=:F80, P80=:P80, Mi::Symbol=:Mi)
     return calculate_specific_energy_morrell.(df[!, F80], df[!, P80], df[!, Mi])
