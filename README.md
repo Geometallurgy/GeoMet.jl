@@ -1,14 +1,12 @@
 # GeoMet.jl
 
-**GeoMet.jl** is a fully written in Julia framework for modeling and calculating geometallurgical metrics.  
-It currently supports the calculation of the **Bond Work Index (BWI)** for mineral processing, based on particle size, material density, and a constant.
+**GeoMet.jl** is a fully written in Julia framework for geometallurgy modelling.
 
 [![Build Status](https://github.com/GeoMet-jl/GeoMet.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/GeoMet-jl/GeoMet.jl/actions/workflows/CI.yml?query=branch%3Amain)
 
 ## Features
 
-- Calculate Bond Work Index (BWI) using scalar values or DataFrames
-- Input validation to ensure safe calculations
+- Calculate the comminution indice Bond Work Index (BWI)
 - Calculate Specific Energy using Charles’ Equation (adjustable exponent for Rittinger, Bond, Kick)
 - Built-in Random Forest model training for prediction
 
