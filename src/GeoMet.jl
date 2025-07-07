@@ -31,23 +31,23 @@ end
 
 #-------------------------------------------------------------------------------------------
 """
-Calculate the specific energy of comminution using Charles' law.
+Calculate the specific energy of comminution using Morrell's method.
 """
-function calculate_specific_energy_charles(F80::Real, P80::Real, K::Real, n::Real)
-    if any(x <= 0 for x in (F80, P80, K))
-        throw(ArgumentError("F80, P80, and K must be positive"))
+function calculate_specific_energy_morrell(F80::Real, P80::Real, Mi::Real)
+    if any(x <= 0 for x in (F80, P80, Mi))
+        throw(ArgumentError("F80, P80 and Mi must be positive"))
     end
     if F80 == P80
-        throw(ArgumentError("F80 and P80 must be different to avoid zero energy result"))
+        throw(ArgumentError("F80 and P80 must be diferent"))
     end
 
-    return K * (1 / P80^n - 1 / F80^n)
+    f(x) = -(0.295 + x / 1_000_000)
+    return Mi * 4 * (P80 * f(P80) - F80 * f(F80))
 end
 
-
-# DataFrame version
-function calculate_specific_energy_charles(df::AbstractDataFrame; F80=:F80, P80=:P80, K::Real=1000.0, n::Real=1.0)
-    return calculate_specific_energy_charles.(df[!,F80], df[!,P80], K, n)
+# Dataframes Version
+function calculate_specific_energy_morrell(df::AbstractDataFrame; F80=:F80, P80=:P80, Mi::Symbol=:Mi)
+    return calculate_specific_energy_morrell.(df[!, F80], df[!, P80], df[!, Mi])
 end
 
 
