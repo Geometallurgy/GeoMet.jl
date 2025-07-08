@@ -30,9 +30,9 @@ function calculate_bwi(df::AbstractDataFrame; F80=:F80, P80=:P80, M=:M, A=:A)
 end
 
 #-------------------------------------------------------------------------------------------
-
 """
 Calculate the specific energy of comminution using Morrell's Equation.
+Returns energy in kWh/t (kilowatt-hours per ton)
 """
 function calculate_specific_energy_morrell(F80::Real, P80::Real, Mi::Real)
     if any(x -> x <= 0, (F80, P80, Mi))
@@ -42,9 +42,12 @@ function calculate_specific_energy_morrell(F80::Real, P80::Real, Mi::Real)
         throw(ArgumentError("F80 and P80 must be different."))
     end
 
-    f(x) = - (0.295 + x / 1_000_000) / x
+    # Convert microns to meters (1e-6) and adjust units to get kWh/t
+    f(x) = (0.295 + x * 1e-6) / (x * 1e-6)  # x in microns
     
-    return Mi * 4 * (P80 * f(P80) - F80 * f(F80)) / 1_000_000  
+    energy = Mi * 4 * (f(P80) - f(F80)) * 1e-3  # Convert to kWh/t
+    
+    return energy
 end
 
 # dataframes version
