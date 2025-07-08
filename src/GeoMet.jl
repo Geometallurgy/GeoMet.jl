@@ -28,8 +28,7 @@ end
 function calculate_bwi(df::AbstractDataFrame; F80=:F80, P80=:P80, M=:M, A=:A)
     return calculate_bwi.(df[!,F80], df[!,P80], df[!,M], df[!,A])
 end
-
-#-------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 """
 Calculate the specific energy of comminution using Morrell's Equation.
 Returns energy in kWh/t (kilowatt-hours per ton)
