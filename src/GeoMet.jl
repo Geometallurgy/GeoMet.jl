@@ -55,12 +55,12 @@ function calculate_specific_energy_morrell(df::AbstractDataFrame; F80=:F80, P80=
 end
 
 #--------------------------------------------------------------------------------------------
-# Calculate the crushing coefficient for a Morrell power equation (Mic)
+# Calculate MIC
 function calculate_mic(A::Real, b::Real)
     if any(x -> x <= 0, (A, b))
         throw(ArgumentError("All parameters must be positive"))
     end
-    return 296.81 * A * b
+    return 296.81 * (A * b)^-1
 end
 
 # DataFrames version
