@@ -6,7 +6,7 @@ using DecisionTree  # Import DecisionTree for Random Forest
 export calculate_bwi  # Exporting the function to be used outside the module
 export calculate_specific_energy_morrell
 export random_forest_model  # Exporting the Random Forest function
-export calculate_mic
+export calculate_mic 
 #---------------------------------------------------------------------------------------
 
 """
