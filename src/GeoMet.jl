@@ -6,7 +6,7 @@ using DecisionTree  # Import DecisionTree for Random Forest
 export calculate_bwi  # Exporting the function to be used outside the module
 export calculate_specific_energy_morrell
 export random_forest_model  # Exporting the Random Forest function
-
+export calculate_mic
 #---------------------------------------------------------------------------------------
 
 """
@@ -54,7 +54,19 @@ function calculate_specific_energy_morrell(df::AbstractDataFrame; F80=:F80, P80=
     return calculate_specific_energy_morrell.(df[!, F80], df[!, P80], df[!, Mi])
 end
 
+#--------------------------------------------------------------------------------------------
+# Calculate the crushing coefficient for a Morrell power equation (Mic)
+function calculate_mic(A::Real, b::Real)
+    if any(x -> x <= 0, (A, b))
+        throw(ArgumentError("All parameters must be positive"))
+    end
+    return 296.81 * A * b
+end
 
+# DataFrames version
+function calculate_mic(df::AbstractDataFrame; A::Symbol, b::Symbol)
+    return calculate_mic.(df[!, A], df[!, b])
+end
 
 #--------------------------------------------------------------------------------------------
 """
