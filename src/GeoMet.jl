@@ -3,9 +3,11 @@ module GeoMet
 using DataFrames # Import DataFrames for data manipulation
 using DecisionTree  # Import DecisionTree for Random Forest
 
-export calculate_bwi  # Exporting the function to be used outside the module
+#Export the functions to be used outside the module
+export calculate_mih
+export calculate_bwi 
 export calculate_specific_energy_morrell
-export random_forest_model  # Exporting the Random Forest function
+export random_forest_model  
 export calculate_mic 
 #---------------------------------------------------------------------------------------
 
@@ -94,5 +96,36 @@ function random_forest_model(df::DataFrame, target::Symbol; n_trees::Int=100)
 
     return model
 end
-#-------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------
+# Calculate MIH
+"""
+calculate_mih(A::Real, b::Real)
+
+Calculates the High Pressure Grinding Roll (HPGR) specific energy index (MIH),
+which estimates how difficult a material is to comminute in HPGRs.
+
+# Arguments
+- `A::Real`: parameter A from the drop weight test
+- `b::Real`: parameter b from the drop weight test
+
+# Returns
+- `MIH` value as Float64
+"""
+function calculate_mih(A::Real, b::Real)
+    if any(x -> x <= 0, (A, b))
+        throw(ArgumentError("All parameters must be positive"))
+    end
+    return 577.37 * (A * b)^-1.00
+end
+
+# DataFrames version
+"""
+calculate_mih(df::AbstractDataFrame; A::Symbol, b::Symbol)
+
+Vectorized version of `calculate_mih` for use with DataFrames.
+"""
+function calculate_mih(df::AbstractDataFrame; A::Symbol, b::Symbol)
+    return calculate_mih.(df[!, A], df[!, b])
+end
+#--------------------------------------------------------------------------------------------
 end
