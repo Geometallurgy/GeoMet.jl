@@ -9,6 +9,7 @@ export calculate_bwi
 export calculate_specific_energy_morrell
 export random_forest_model  
 export calculate_mic 
+export calculate_mia_energy
 #---------------------------------------------------------------------------------------
 
 """
@@ -96,6 +97,30 @@ function random_forest_model(df::DataFrame, target::Symbol; n_trees::Int=100)
 
     return model
 end
+
+#--------------------------------------------------------------------------------------------
+# Calculate MIA
+
+function calculate_mia_energy(F80::Real, P80::Real, Mi::Real, K::Real; circuit_type::String="SAG")
+    if any(x -> x <= 0, (F80, P80, Mi, K))
+        throw(ArgumentError("F80, P80, Mi, and K must be positive."))
+    end
+    
+    f(x) = (0.295 + x * 1e-6) / (x * 1e-6) 
+    
+    circuit_factor = Dict("SAG" => 1.0, "AG" => 1.1, "Ball" => 0.9)[circuit_type]
+    
+    energy = K * circuit_factor * Mi * 4 * (f(P80) - f(F80)) * 1e-3 
+    
+    return energy
+end
+
+function calculate_mia_energy(df::AbstractDataFrame; F80=:F80, P80=:P80, Mi=:Mi, K=:K, circuit_type::String="SAG")
+    return calculate_mia_energy.(df[!, F80], df[!, P80], df[!, Mi], df[!, K]; circuit_type=circuit_type)
+end
+
+
+
 #--------------------------------------------------------------------------------------------
 # Calculate MIH
 """
