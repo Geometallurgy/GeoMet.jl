@@ -19,7 +19,34 @@ using DataFrames
     model = random_forest_model(df, :BWI, n_trees=5)  # Train small model
     @test !isnothing(model)  # Basic check that model was trained
 end
+
+@testset "GeoMet.jl – MIA Energy Tests" begin
+    # Test with known values (hand-calculated example)
+    @test isapprox(
+        calculate_mia_energy(1000.0, 100.0, 12.0, 1.0; circuit_type="SAG"),
+        12.0 * 1.0 * 4 * ((0.295 + 100e-6)/(100e-6) - (0.295 + 1000e-6)/(1000e-6)) * 1e-3,
+        atol=0.01
+    )
     
+    # Test circuit type factors
+    sag_energy = calculate_mia_energy(1000.0, 100.0, 12.0, 1.0; circuit_type="SAG")
+    ag_energy = calculate_mia_energy(1000.0, 100.0, 12.0, 1.0; circuit_type="AG")
+    ball_energy = calculate_mia_energy(1000.0, 100.0, 12.0, 1.0; circuit_type="Ball")
+    @test ag_energy ≈ sag_energy * 1.1
+    @test ball_energy ≈ sag_energy * 0.9
+
+    # Error tests
+    @test_throws ArgumentError calculate_mia_energy(-1.0, 100.0, 12.0, 1.0)
+    @test_throws ArgumentError calculate_mia_energy(1000.0, 1000.0, 12.0, 1.0)
+    @test_throws ArgumentError calculate_mia_energy(1000.0, 100.0, 12.0, 1.0; circuit_type="Invalid")
+
+    # DataFrame test
+    df = DataFrame(F80=[1000.0, 2000.0], P80=[100.0, 150.0], Mi=[12.0, 15.0], K=[1.0, 1.1])
+    results = calculate_mia_energy(df; circuit_type="SAG")
+    @test length(results) == 2
+    @test results[1] ≈ sag_energy
+end
+
 @testset "GeoMet.jl – Morrell Specific Energy" begin
     # Test with values from your dataframe (first row)
     F80_test = 2174.24  # μm
