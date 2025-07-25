@@ -10,6 +10,7 @@ export calculate_specific_energy_morrell
 export random_forest_model  
 export calculate_mic 
 export calculate_mia_energy
+export run_lasso_regression
 #---------------------------------------------------------------------------------------
 
 """
@@ -153,4 +154,36 @@ function calculate_mih(df::AbstractDataFrame; A::Symbol, b::Symbol)
     return calculate_mih.(df[!, A], df[!, b])
 end
 #--------------------------------------------------------------------------------------------
+using GLMNet, Statistics
+
+"""
+    run_lasso_regression(X::Matrix{Float64}, y::Vector{Float64}; lambda::Float64=0.01)
+
+Run Lasso regression using GLMNet.jl and return predicted values.
+This function assumes that X and y are preprocessed matrices/vectors.
+"""
+function run_lasso_regression(X::Matrix{Float64}, y::Vector{Float64}; lambda::Float64=0.01)
+    fit = glmnet(X, y, lambda=[lambda], alpha=1.0, standardize=true)
+    coefs = coef(fit)
+    intercept = coefs[1, 1]
+    weights = coefs[2:end, 1]
+    return intercept .+ X * weights
+end
+
+"""
+    run_lasso_regression(df::DataFrame, target::Symbol, features::Vector{Symbol}; lambda::Float64=0.01)
+
+Run Lasso regression on a DataFrame.
+- `df`: The DataFrame containing the data.
+- `target`: Symbol for the name of the dependent variable.
+- `features`: Vector of Symbols for the independent variables.
+
+Returns the predicted values.
+"""
+function run_lasso_regression(df::DataFrame, target::Symbol, features::Vector{Symbol}; lambda::Float64=0.01)
+    X = Matrix(df[:, features])
+    y = df[:, target]
+    return run_lasso_regression(X, y; lambda=lambda)
+end
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
 end
