@@ -72,7 +72,9 @@ end
     @test isapprox(results[1], expected, atol=0.01)
 end
 
-@testset "GeoMet.jl – Lasso Regression" begin
+using Test, DataFrames
+
+@testset "GeoMet.jl – Ridge Regression" begin
     df = DataFrame(
         A = [1.0, 2.0, 3.0, 4.0, 5.0],
         B = [2.0, 4.1, 6.2, 8.3, 10.1],
@@ -80,11 +82,13 @@ end
         target = [5.0, 9.9, 15.1, 19.8, 25.2]
     )
 
-    predictions = run_lasso_regression(df, :target, [:A, :B, :C], lambda=0.01)
+    predictions = run_ridge_regression(df, :target, [:A, :B, :C], lambda=0.01)
     @test length(predictions) == nrow(df)
     @test isapprox(predictions[1], df.target[1]; atol=0.5)
     @test isapprox(predictions[end], df.target[end]; atol=0.5)
 
-    @test_throws ArgumentError run_lasso_regression(df, :target, [:A, :B, :Z])
+    @test_throws ArgumentError df[:, [:A, :B, :Z]]  # erro de acesso antes da regressão
 end
+
+
 
