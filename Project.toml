@@ -7,6 +7,7 @@ version = "0.1.1"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 DecisionTree = "7806a523-6efd-50cb-b5f6-3fa6f1930dbb"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+GLMNet = "a5b4a1fa-59b6-4b8e-8c5f-6e654746fcb9"
 
 [compat]
 DataFrames = "1.0, 2.0"
