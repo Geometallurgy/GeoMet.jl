@@ -103,23 +103,36 @@ end
 # Calculate MIA
 
 function calculate_mia_energy(F80::Real, P80::Real, Mi::Real, K::Real; circuit_type::String="SAG")
+    # Validate numeric parameters
     if any(x -> x <= 0, (F80, P80, Mi, K))
-        throw(ArgumentError("F80, P80, Mi, and K must be positive."))
+        throw(ArgumentError("F80, P80, Mi and K must be positive."))
     end
-    
-    f(x) = (0.295 + x * 1e-6) / (x * 1e-6) 
-    
-    circuit_factor = Dict("SAG" => 1.0, "AG" => 1.1, "Ball" => 0.9)[circuit_type]
-    
-    energy = K * circuit_factor * Mi * 4 * (f(P80) - f(F80)) * 1e-3 
-    
+    if F80 == P80
+        throw(ArgumentError("F80 and P80 must be different to avoid division by zero."))
+    end
+
+    # Auxiliary calculation function
+    f(x) = (0.295 + x * 1e-6) / (x * 1e-6)
+
+    # Circuit type factors
+    circuit_dict = Dict("SAG" => 1.0, "AG" => 1.1, "Ball" => 0.9)
+
+    # Circuit type validation
+    if !haskey(circuit_dict, circuit_type)
+        throw(ArgumentError("Invalid circuit type. Use 'SAG', 'AG' or 'Ball'."))
+    end
+
+    # Energy calculation
+    circuit_factor = circuit_dict[circuit_type]
+    energy = K * circuit_factor * Mi * 4 * (f(P80) - f(F80)) * 1e-3
+
     return energy
 end
 
+# DataFrame version (must be defined outside the previous one)
 function calculate_mia_energy(df::AbstractDataFrame; F80=:F80, P80=:P80, Mi=:Mi, K=:K, circuit_type::String="SAG")
     return calculate_mia_energy.(df[!, F80], df[!, P80], df[!, Mi], df[!, K]; circuit_type=circuit_type)
 end
-
 
 
 #--------------------------------------------------------------------------------------------
