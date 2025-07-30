@@ -175,7 +175,6 @@ using Statistics, MultivariateStats
 """
     run_ridge_regression(X::Matrix{Float64}, y::Vector{Float64}; lambda::Float64=0.01)
 
-Run Ridge regression using MultivariateStats.jl and return predicted values.
 This function assumes that X and y are preprocessed matrices/vectors.
 """
 
@@ -185,11 +184,15 @@ struct LinearModel
 end
 
 function run_ridge_regression(X::Matrix{Float64}, y::Vector{Float64}; lambda::Float64=0.01)
-    model = fit(LinearModel, X, y; bias=true, lambda=lambda)
-    intercept = model.bias
-    weights = model.coeffs
-    return intercept .+ X * weights
+    X_aug = hcat(ones(size(X, 1)), X)  
+    I = Matrix{Float64}(I, size(X_aug, 2), size(X_aug, 2))
+    I[1,1] = 0  
+    β = (X_aug' * X_aug + lambda * I) \ (X_aug' * y)
+    intercept = β[1]
+    coefficients = β[2:end]
+    return LinearModel(coefficients, intercept)
 end
+
 
 """
     run_ridge_regression(df::DataFrame, target::Symbol, features::Vector{Symbol}; lambda::Float64=0.01)
