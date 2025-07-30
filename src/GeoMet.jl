@@ -171,6 +171,7 @@ function calculate_mih(df::AbstractDataFrame; A::Symbol, b::Symbol)
 end
 #--------------------------------------------------------------------------------------------
 using Statistics, MultivariateStats
+using LinearAlgebra: I
 
 """
     run_ridge_regression(X::Matrix{Float64}, y::Vector{Float64}; lambda::Float64=0.01)
