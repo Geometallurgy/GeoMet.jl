@@ -11,8 +11,9 @@ export calculate_specific_energy_morrell
 export random_forest_model  
 export calculate_mic 
 export calculate_mia_energy
-export run_ridge_regression
+export run_ridge_regression, LinearModel
 export calculate_Ab
+
 #---------------------------------------------------------------------------------------
 
 """
@@ -177,6 +178,12 @@ using Statistics, MultivariateStats
 Run Ridge regression using MultivariateStats.jl and return predicted values.
 This function assumes that X and y are preprocessed matrices/vectors.
 """
+
+struct LinearModel
+    coefficients::Vector{Float64}
+    intercept::Float64
+end
+
 function run_ridge_regression(X::Matrix{Float64}, y::Vector{Float64}; lambda::Float64=0.01)
     model = fit(LinearModel, X, y; bias=true, lambda=lambda)
     intercept = model.bias
