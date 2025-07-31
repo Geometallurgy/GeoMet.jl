@@ -11,7 +11,7 @@ export calculate_specific_energy_morrell
 export random_forest_model  
 export calculate_mic 
 export calculate_mia_energy
-export run_ridge_regression, LinearModel
+export run_ridge_regression, LinearModel, predict
 export calculate_Ab
 
 #---------------------------------------------------------------------------------------
@@ -172,6 +172,15 @@ end
 #--------------------------------------------------------------------------------------------
 using Statistics, MultivariateStats
 using LinearAlgebra: I
+"""
+    predict(model::LinearModel, df::DataFrame, features::Vector{Symbol})
+
+Calcula os valores previstos usando um modelo LinearModel treinado.
+"""
+function predict(model::LinearModel, df::DataFrame, features::Vector{Symbol})
+    X = Matrix(df[:, features])
+    return model.intercept .+ X * model.coefficients
+end
 
 """
     run_ridge_regression(X::Matrix{Float64}, y::Vector{Float64}; lambda::Float64=0.01)
@@ -183,6 +192,7 @@ struct LinearModel
     coefficients::Vector{Float64}
     intercept::Float64
 end
+
 
 function run_ridge_regression(X::Matrix{Float64}, y::Vector{Float64}; lambda::Float64=0.01)
     X_aug = hcat(ones(size(X, 1)), X)  
