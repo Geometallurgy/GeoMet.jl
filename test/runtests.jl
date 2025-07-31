@@ -80,7 +80,7 @@ end
     @test isapprox(results[1], expected, atol=0.01)
 end
 
-using Test, DataFrames
+
 
 @testset "GeoMet.jl – Ridge Regression" begin
     df = DataFrame(
@@ -90,12 +90,15 @@ using Test, DataFrames
         target = [5.0, 9.9, 15.1, 19.8, 25.2]
     )
 
-    predictions = run_ridge_regression(df, :target, [:A, :B, :C], lambda=0.01)
+    model = run_ridge_regression(df, :target, [:A, :B, :C], lambda=0.01)
+    predictions = predict(model, df)
     @test length(predictions) == nrow(df)
     @test isapprox(predictions[1], df.target[1]; atol=0.5)
     @test isapprox(predictions[end], df.target[end]; atol=0.5)
 
     @test_throws ArgumentError df[:, [:A, :B, :Z]]  # erro de acesso antes da regressão
+
+    
 end
 
 
