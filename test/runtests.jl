@@ -91,7 +91,7 @@ end
     )
 
     model = run_ridge_regression(df, :target, [:A, :B, :C], lambda=0.01)
-    predictions = predict(model, Matrix(df[:, [:A, :B, :C]]))
+    predictions = predict(model, df, [:A, :B, :C])
     @test length(predictions) == nrow(df)
     @test isapprox(predictions[1], df.target[1]; atol=0.5)
     @test isapprox(predictions[end], df.target[end]; atol=0.5)
