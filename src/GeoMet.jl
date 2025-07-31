@@ -172,6 +172,11 @@ end
 #--------------------------------------------------------------------------------------------
 using Statistics, MultivariateStats
 using LinearAlgebra: I
+
+struct LinearModel
+    coefficients::Vector{Float64}
+    intercept::Float64
+end
 """
     predict(model::LinearModel, df::DataFrame, features::Vector{Symbol})
 
@@ -188,10 +193,7 @@ end
 This function assumes that X and y are preprocessed matrices/vectors.
 """
 
-struct LinearModel
-    coefficients::Vector{Float64}
-    intercept::Float64
-end
+
 
 
 function run_ridge_regression(X::Matrix{Float64}, y::Vector{Float64}; lambda::Float64=0.01)
