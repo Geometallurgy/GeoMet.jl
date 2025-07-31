@@ -186,9 +186,9 @@ end
 
 function run_ridge_regression(X::Matrix{Float64}, y::Vector{Float64}; lambda::Float64=0.01)
     X_aug = hcat(ones(size(X, 1)), X)  
-    I = Matrix{Float64}(I, size(X_aug, 2), size(X_aug, 2))
-    I[1,1] = 0  
-    β = (X_aug' * X_aug + lambda * I) \ (X_aug' * y)
+    I_mod = Matrix{Float64}(I, size(X_aug, 2), size(X_aug, 2))
+    I_mod[1, 1] = 0
+    β = (X_aug' * X_aug + lambda * I_mod) \ (X_aug' * y)
     intercept = β[1]
     coefficients = β[2:end]
     return LinearModel(coefficients, intercept)
