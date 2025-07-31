@@ -265,7 +265,10 @@ function calculate_Ab(th_values::Vector{<:Real}, e_values::Vector{<:Real})
     A_val = coef(fit)[1]
     b_val = coef(fit)[2]
 
-    return A_val, b_val
+    # calculate the product of A and b
+    Ab_product = A_val * b_val
+
+    return A_val, b_val, Ab_product
 end
 
 # dataFrames version (assuming each row contains th1, th2, th3 and e1, e2, e3)
@@ -285,17 +288,20 @@ vectorized version of `calculate_Ab` for use with DataFrames.
 function calculate_Ab(df::AbstractDataFrame; th_cols::Vector{Symbol}, e_cols::Vector{Symbol})
     A_vals = Float64[]
     b_vals = Float64[]
+    Ab_products = Float64[]
 
     for i in 1:nrow(df)
         th_row = [df[i, th_cols[1]], df[i, th_cols[2]], df[i, th_cols[3]]]
         e_row = [df[i, e_cols[1]], df[i, e_cols[2]], df[i, e_cols[3]]]
         
-        A, b = calculate_Ab(th_row, e_row)
+        
+        A, b, Ab_product = calculate_Ab(th_row, e_row)
         push!(A_vals, A)
         push!(b_vals, b)
+        push!(Ab_products, Ab_product)
     end
 
-    return DataFrame(A=A_vals, b=b_vals)
+    return DataFrame(A=A_vals, b=b_vals, Ab_product=Ab_products)
 end
 
 end
