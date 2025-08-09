@@ -245,6 +245,8 @@ function calculate_Ab(th_values::Vector{<:Real})
     # define the model function for t
     model_t(A, b, e) = A * (1 - exp(-b * e))
 
+        th_values_processed = round.(th_values .* 100, digits=2)
+
     # define the objective function to minimize (sum of squared errors)
     function objective(p, th_obs, e_vals)
         A, b = p
@@ -269,7 +271,7 @@ function calculate_Ab(th_values::Vector{<:Real})
 
     # perform the non-linear least squares fit with bounds
     fit = LsqFit.curve_fit((e, p) -> [model_t(p[1], p[2], e[1]), model_t(p[1], p[2], e[2]), model_t(p[1], p[2], e[3])],
-                           e_values, th_values, p0, lower=lower_bounds, upper=upper_bounds)
+                           e_values, th_values_processed, p0, lower=lower_bounds, upper=upper_bounds)
 
     # extract the optimized parameters
     A_val = coef(fit)[1]
@@ -301,8 +303,9 @@ function calculate_Ab(df::AbstractDataFrame; th_cols::Vector{Symbol})
 
     for i in 1:nrow(df)
         th_row = [df[i, th_cols[1]], df[i, th_cols[2]], df[i, th_cols[3]]]
+        th_row_processed = round.(th_row .* 100, digits=2)
         
-        A, b, Ab_product = calculate_Ab(th_row)
+        A, b, Ab_product = calculate_Ab(th_row_processed)
         push!(A_vals, A)
         push!(b_vals, b)
         push!(Ab_products, Ab_product)
