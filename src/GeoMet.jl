@@ -224,24 +224,22 @@ end
 
 #--------------------------------------------------------------------------------------------------------------------------------------------------------
 """
-calculate_Ab(th_values::Vector{<:Real}, e_values::Vector{<:Real})
+calculate_Ab(th_values::Vector{<:Real})
 
 calculates the A and b parameters by minimizing the sum of squared errors
 for the model t = A * (1 - exp(-b * e)), using excel solver logic.
 
 #arguments
 -th_values::Vector{<:Real}: Vector of observed t values (th1, th2, th3).
--e_values::Vector{<:Real}: Vector of energy values (e1, e2, e3).
 
 #returns
 - tuple{float64, float64}: a tuple containing the calculated A and b parameters.
 """
-function calculate_Ab(th_values::Vector{<:Real}, e_values::Vector{<:Real})
-    if length(th_values) != 3 || length(e_values) != 3
-        throw(ArgumentError("th_values and e_values must contain exactly 3 elements."))
-    end
-    if any(x -> x <= 0, e_values)
-        throw(ArgumentError("All e_values must be positive."))
+function calculate_Ab(th_values::Vector{<:Real})
+    e_values = [0.25, 1.0, 2.50] 
+
+    if length(th_values) != 3
+        throw(ArgumentError("th_values must contain exactly 3 elements."))
     end
 
     # define the model function for t
@@ -280,34 +278,31 @@ function calculate_Ab(th_values::Vector{<:Real}, e_values::Vector{<:Real})
     # calculate the product of A and b
     Ab_product = A_val * b_val
 
-    return A_val, b_val, Ab_product
+    return round(A_val, digits=0), round(b_val, digits=2), round(Ab_product, digits=1)
 end
 
-# dataFrames version (assuming each row contains th1, th2, th3 and e1, e2, e3)
+# dataFrames version (assuming each row contains th1, th2, th3)
 """
-calculate_Ab(df::AbstractDataFrame; th_cols::Vector{Symbol}, e_cols::Vector{Symbol})
+calculate_Ab(df::AbstractDataFrame; th_cols::Vector{Symbol})
 
 vectorized version of `calculate_Ab` for use with DataFrames.
 
 # arguments
 - df::AbstractDataFrame: input dataframe.
 - th_cols::Vector{Symbol}: column names for observed t values (th1, th2, th3).
-- e_cols::Vector{Symbol}: Column names for energy values (e1, e2, e3).
 
 # returns
 - dataframe: a dataframe with calculated A and b parameters for each row.
 """
-function calculate_Ab(df::AbstractDataFrame; th_cols::Vector{Symbol}, e_cols::Vector{Symbol})
+function calculate_Ab(df::AbstractDataFrame; th_cols::Vector{Symbol})
     A_vals = Float64[]
     b_vals = Float64[]
     Ab_products = Float64[]
 
     for i in 1:nrow(df)
         th_row = [df[i, th_cols[1]], df[i, th_cols[2]], df[i, th_cols[3]]]
-        e_row = [df[i, e_cols[1]], df[i, e_cols[2]], df[i, e_cols[3]]]
         
-        
-        A, b, Ab_product = calculate_Ab(th_row, e_row)
+        A, b, Ab_product = calculate_Ab(th_row)
         push!(A_vals, A)
         push!(b_vals, b)
         push!(Ab_products, Ab_product)
@@ -317,3 +312,5 @@ function calculate_Ab(df::AbstractDataFrame; th_cols::Vector{Symbol}, e_cols::Ve
 end
 
 end
+
+
